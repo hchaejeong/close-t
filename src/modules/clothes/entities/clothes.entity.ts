@@ -46,7 +46,7 @@ export class ClothesEntity extends BaseEntity {
         nullable: true,
     })
     @Expose()
-    tag: Tag;
+    tag: Tag | null;
 
     @Column({
         type: 'varchar',
@@ -61,7 +61,7 @@ export class ClothesEntity extends BaseEntity {
         nullable: true,
     })
     @Expose()
-    link?: string;
+    link?: string | null;
 
     @ManyToOne(() => UserEntity, (user) => user.clothes)
     @Exclude({ toPlainOnly: true })

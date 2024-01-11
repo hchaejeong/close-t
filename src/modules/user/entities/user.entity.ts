@@ -17,6 +17,7 @@ export enum Styles {
     Chic = '모던시크',
     Romantic = '로맨틱럭셔리',
     Formal = '포멀/오피스룩',
+    Natural = '꾸안꾸',
 }
 
 @Entity({
