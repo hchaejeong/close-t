@@ -36,7 +36,7 @@ export class CodiController {
   }
 
   @Patch(':codiId/add/:clothesId')
-  public async updateCodi(@Param('userId') userId: string, @Param('codiId') codiId: string, @Param('clothesId') clothesId: string) {
+  public async updateCodi(@Param('userId') userId: string, @Param('codiId') codiId: string, @Param('clothesId') clothesId: string): Promise<string> {
     return await this.codiService.updateCodi({ userId, codiId, clothesId });
   }
 

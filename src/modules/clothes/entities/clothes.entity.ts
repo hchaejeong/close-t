@@ -47,7 +47,7 @@ export class ClothesEntity extends BaseEntity {
         array: true,
     })
     @Expose()
-    tag: Tag[] | null;
+    tag?: Tag[] | null;
 
     @Column({
         type: 'varchar',
