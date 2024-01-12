@@ -14,7 +14,7 @@ export enum Category {
 export enum Tag {
     Like = 'like',
     Wish = 'wish',
-    Dislike = 'dislike',
+    Trash = 'trash',
 }
 
 @Entity({
@@ -44,9 +44,10 @@ export class ClothesEntity extends BaseEntity {
         type: 'varchar',
         length: 25,
         nullable: true,
+        array: true,
     })
     @Expose()
-    tag: Tag | null;
+    tag: Tag[] | null;
 
     @Column({
         type: 'varchar',

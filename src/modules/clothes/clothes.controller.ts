@@ -5,7 +5,7 @@ import { GetClothesResponseDto } from './dtos/get-clothes-response.dto';
 import { FilterClothesByTagRequestDto } from './dtos/filter-clothes-by-tag-request.dto';
 import { GetSelectedClothesResponseDto } from './dtos/get-selected-clothes-response.dto';
 
-@Controller('clothes')
+@Controller(':userId/clothes')
 export class ClothesController {
   constructor(private readonly clothesService: ClothesService) {}
 

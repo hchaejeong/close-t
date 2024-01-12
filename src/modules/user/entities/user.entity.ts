@@ -1,6 +1,6 @@
 import { Exclude, Expose } from "class-transformer";
 import { ClothesEntity } from "src/modules/clothes/entities/clothes.entity";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BodyType {
     Straight = '스트레이트',
@@ -24,7 +24,11 @@ export enum Styles {
     name: 'user',
 })
 export class UserEntity extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn({
+        type: 'varchar',
+        length: 50,
+        unique: true,
+    })
     @Expose()
     id: string;
 
@@ -44,31 +48,34 @@ export class UserEntity extends BaseEntity {
 
     @Column({
         type: 'int',
+        nullable: true,
     })
     @Expose()
-    age: number;
+    age?: number | null;
 
     @Column({
         type: 'int',
         nullable: true,
     })
     @Expose()
-    height?: number;
+    height?: number | null;
 
     @Column({
         type: 'varchar',
         length: 50,
+        nullable: true,
     })
     @Expose()
-    bodyType: BodyType;
+    bodyType?: BodyType | null;
 
     @Column({
         type: 'varchar',
         length: 100,
         array: true,
+        nullable: true,
     })
     @Expose()
-    styles: Styles[];
+    styles?: Styles[] | null;
 
     @OneToMany(() => ClothesEntity, (clothes) => clothes.user)
     @Exclude({ toPlainOnly: true })

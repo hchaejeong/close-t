@@ -8,7 +8,7 @@ import { Category, ClothesEntity, Tag } from "../entities/clothes.entity";
 export class ClothesRepository {
     constructor(@InjectRepository(ClothesEntity) private repository: Repository<ClothesEntity>,) {}
 
-    create(args: { category: Category, styles: Styles[], tag: Tag, imageUrl: string, link?: string, user: UserEntity}): ClothesEntity {
+    create(args: { category: Category, styles: Styles[], tag: Tag[], imageUrl: string, link?: string, user: UserEntity}): ClothesEntity {
         const { category, styles, tag, imageUrl, link, user } = args;
 
         return this.repository.create({
