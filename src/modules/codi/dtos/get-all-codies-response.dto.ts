@@ -1,16 +1,16 @@
-import { IsArray, IsString } from "class-validator"
+import { IsArray, IsEnum, IsString } from "class-validator"
 import { Like } from "../entities/codi.entity";
 
 export class GetAllCodiesResponseDto {
-    @IsString()
     @IsArray()
+    @IsString({ each: true })
     codiIds: string[];
     
-    @IsString()
+    @IsEnum(Like, { each: true })
     @IsArray()
     likes: Like[];
 
-    @IsString()
+    @IsString({ each: true })
     @IsArray()
     clothesImageUrls: string[][];
 }

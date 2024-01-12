@@ -26,8 +26,8 @@ export enum Styles {
 export class UserEntity extends BaseEntity {
     @PrimaryColumn({
         type: 'varchar',
-        length: 50,
         unique: true,
+        length: 100,
     })
     @Expose()
     id: string;
@@ -38,6 +38,21 @@ export class UserEntity extends BaseEntity {
     })
     @Expose()
     name: string;
+
+    @Column({
+        type: 'varchar',
+        length: 100,
+    })
+    @Expose()
+    profileImage: string;
+
+    @Column({
+        type: 'varchar',
+        length: 255,
+        unique: true,
+    })
+    @Expose()
+    email: string;
 
     @Column({
         type: 'varchar',
@@ -70,7 +85,7 @@ export class UserEntity extends BaseEntity {
 
     @Column({
         type: 'varchar',
-        length: 100,
+        length: 50,
         array: true,
         nullable: true,
     })

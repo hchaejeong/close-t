@@ -6,13 +6,15 @@ import { BodyType, Styles, UserEntity } from '../entities/user.entity';
 export class UserService {
     constructor(private userRepository: UserRepository) {}
 
-    async createUser(args: { id: string, name: string, gender: string, age?: number, height?: number, bodyType?: BodyType, styles?: Styles[] }) {
-        const { id, name, gender, age, height, bodyType, styles } = args;
+    async createUser(args: { id: string, name: string, email: string, profileImage: string, gender: string, age?: number, height?: number, bodyType?: BodyType, styles?: Styles[] }): Promise<UserEntity> {
+        const { id, name, email, profileImage, gender, age, height, bodyType, styles } = args;
         
         const user = await this.userRepository.save(
             this.userRepository.create({
                 id,
                 name,
+                email,
+                profileImage,
                 gender,
                 age,
                 height,
@@ -22,6 +24,21 @@ export class UserService {
         );
 
         return user;
+    }
+
+    async checkUserExists(args: { id: string }): Promise<string> {
+        const { id } = args;
+
+        const user = this.userRepository.findOne({
+            where: {
+                id,
+            },
+        });
+
+        if (!user) {
+            return 'new user';
+        }
+        return 'returning user';
     }
 
     async getProfile(args: { id: string }): Promise<UserEntity> {

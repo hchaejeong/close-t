@@ -31,7 +31,7 @@ export class CodiEntity extends BaseEntity {
     like: Like;
 
     @Column({
-        type: 'varchar',
+        type: 'uuid',
         array: true,
     })
     @Expose()
@@ -39,6 +39,7 @@ export class CodiEntity extends BaseEntity {
 
     @Column({
         type: 'varchar',
+        length: 100,
         array: true,
     })
     @Expose()

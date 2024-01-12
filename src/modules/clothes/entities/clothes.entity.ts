@@ -27,7 +27,7 @@ export class ClothesEntity extends BaseEntity {
 
     @Column({
         type: 'varchar',
-        length: 15,
+        length: 25,
     })
     @Expose()
     category: Category;

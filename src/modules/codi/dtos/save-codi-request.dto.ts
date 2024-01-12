@@ -1,21 +1,22 @@
-import { IsArray, IsOptional, IsString } from "class-validator"
+import { IsArray, IsEnum, IsOptional, IsString } from "class-validator"
 import { Styles } from "src/modules/user/entities/user.entity"
 import { Like } from "../entities/codi.entity";
 
 export class SaveCodiRequestDto {
-    @IsString()
+    @IsEnum(Styles, { each: true })
     @IsArray()
     styles: Styles[];
 
+    @IsEnum(Like)
     @IsString()
     like: Like;
 
-    @IsString()
     @IsArray()
+    @IsString({ each: true })
     clothesIds: string[];
 
     @IsString()
-    @IsArray()
+    @IsString({ each: true })
     clothesImages: string[];
 
     @IsString()

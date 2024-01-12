@@ -1,24 +1,25 @@
-import { IsArray, IsOptional, IsString } from "class-validator"
+import { IsArray, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Styles } from "src/modules/user/entities/user.entity"
 import { Like } from "../entities/codi.entity";
 
 export class GetSelectedCodiResponseDto {
-    @IsString()
+    @IsEnum(Styles, { each: true })
     @IsArray()
     styles: Styles[];
 
-    @IsString()
     @IsArray()
+    @IsString({ each: true })
     clothesImages: string[];
 
     @IsString()
     @IsOptional()
     comment?: string;
 
+    @IsEnum(Like)
     @IsString()
     like: Like;
 
-    @IsString()
     @IsArray()
+    @IsString({ each: true })
     links: string[];
 }

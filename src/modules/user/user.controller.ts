@@ -8,18 +8,23 @@ import { CreateUserResponseDto } from './dtos/create-user-response.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get(':userId')
+  @Get(':userId/profile')
   public async getProfile(@Param('userId') userId: string): Promise<GetProfileResponseDto> {
     const user = await this.userService.getProfile({ id: userId });
 
-    return { name: user.name, gender: user.gender };
+    return { name: user.name, gender: user.gender, email: user.email, profileImage: user.profileImage };
   }
 
-  @Post()
+  @Get(':userId/check')
+  public async checkUserExists(@Param('userId') userId: string): Promise<string> {
+    return await this.userService.checkUserExists({ id: userId });
+  }
+
+  @Post('create')
   public async createUser(@Body() body: CreateUserRequestDto): Promise<CreateUserResponseDto> {
-    const { id, name, gender, age, height, bodyType, styles } = body;
+    const { id, name, email, profileImage, gender, age, height, bodyType, styles } = body;
     
-    const user = await this.userService.createUser({ id, name, gender, age, height, bodyType, styles });
+    const user = await this.userService.createUser({ id, name, email, profileImage, gender, age, height, bodyType, styles });
 
     return { user }; 
   }

@@ -7,12 +7,14 @@ import { BodyType, Styles, UserEntity } from "../entities/user.entity";
 export class UserRepository {
     constructor(@InjectRepository(UserEntity) private repository: Repository<UserEntity>,) {}
 
-    create(args: { id: string, name: string, gender: string, age?: number, height?: number, bodyType?: BodyType,  styles?: Styles[] }): UserEntity {
-        const { id, name, gender, age, height, bodyType, styles } = args;
+    create(args: { id: string, name: string, email: string, profileImage: string, gender: string, age?: number, height?: number, bodyType?: BodyType,  styles?: Styles[] }): UserEntity {
+        const { id, name, email, profileImage, gender, age, height, bodyType, styles } = args;
 
         return this.repository.create({
             id,
             name,
+            email,
+            profileImage,
             gender,
             age,
             height,
