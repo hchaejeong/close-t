@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ClothesService } from './services/clothes.service';
 import { GetClothesByCategoryRequestDto } from './dtos/get-clothes-by-category-request.dto';
 import { GetClothesResponseDto } from './dtos/get-clothes-response.dto';
@@ -6,6 +6,7 @@ import { FilterClothesByTagRequestDto } from './dtos/filter-clothes-by-tag-reque
 import { GetSelectedClothesResponseDto } from './dtos/get-selected-clothes-response.dto';
 import { Tag } from './entities/clothes.entity';
 import { StringResponseDto } from '../codi/dtos/string-response.dto';
+import { AddClothesRequestDto } from './dtos/add-clothes-request.dto';
 
 @Controller(':userId/clothes')
 export class ClothesController {
@@ -34,6 +35,20 @@ export class ClothesController {
     const selectedClothes = await this.clothesService.getSelectedClothes({ id: clothesId, userId });
 
     return { selectedClothes };
+  }
+
+  @Post('add')
+  public async addClothes(@Param('userId') userId: string, @Body() body: AddClothesRequestDto): Promise<StringResponseDto> {
+    const { category, styles, tag, imageUrl, link } = body;
+
+    return await this.clothesService.addClothes({
+      category,
+      styles,
+      tag,
+      imageUrl,
+      link,
+      userId,
+    });
   }
 
   @Patch(':clothesId/changeLike')

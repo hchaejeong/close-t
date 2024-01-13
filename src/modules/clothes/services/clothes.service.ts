@@ -6,6 +6,8 @@ import { ILike } from 'typeorm';
 import { QueryBus } from '@nestjs/cqrs';
 import { GetCodiesQuery } from 'src/modules/codi/queries/impl/get-codies.query';
 import { UpdateCodiQuery } from 'src/modules/codi/queries/impl/update-codi-query';
+import { Styles } from 'src/modules/user/entities/user.entity';
+import { GetUserQuery } from 'src/modules/user/queries/impl/get-user.query';
 
 @Injectable()
 export class ClothesService {
@@ -47,6 +49,35 @@ export class ClothesService {
         });
 
         return selectedClothes;
+    }
+
+    async addClothes(args: { category: Category, styles: Styles[], tag?: Tag[], imageUrl: string, link?: string, userId: string }): Promise<StringResponseDto> {
+        const { category, styles, tag, imageUrl, link, userId } = args;
+
+        const user = await this.queryBus.execute(
+            new GetUserQuery({
+                where: {
+                    id: userId,
+                },
+            }),
+        );
+
+        if (!user) {
+            return { result: 'No corresponding user found' };
+        }
+
+        const clothes = await this.clothesRepository.save(
+            await this.clothesRepository.create({
+                category,
+                styles,
+                tag,
+                imageUrl,
+                link,
+                user,
+            }),
+        );
+
+        return { result: 'a new clothes entity has been created: ' + clothes.id };
     }
 
     async likeOrDislikeClothes(args: { clothesId: string, userId: string }): Promise<StringResponseDto> {
