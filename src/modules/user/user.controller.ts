@@ -16,7 +16,7 @@ export class UserController {
   }
 
   @Get(':userId/check')
-  public async checkUserExists(@Param('userId') userId: string): Promise<string> {
+  public async checkUserExists(@Param('userId') userId: string): Promise<{ result: string }> {
     return await this.userService.checkUserExists({ id: userId });
   }
 

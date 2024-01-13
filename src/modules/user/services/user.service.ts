@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { BodyType, Styles, UserEntity } from '../entities/user.entity';
 
@@ -26,19 +26,20 @@ export class UserService {
         return user;
     }
 
-    async checkUserExists(args: { id: string }): Promise<string> {
+    async checkUserExists(args: { id: string }): Promise<{ result: string }> {
         const { id } = args;
 
-        const user = this.userRepository.findOne({
+        const user = await this.userRepository.findOne({
             where: {
                 id,
             },
         });
 
         if (!user) {
-            return 'new user';
+            return { result: 'new user' } ;
+        } else {
+            return { result: 'returning user' };
         }
-        return 'returning user';
     }
 
     async getProfile(args: { id: string }): Promise<UserEntity> {

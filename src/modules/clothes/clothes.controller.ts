@@ -1,10 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
 import { ClothesService } from './services/clothes.service';
 import { GetClothesByCategoryRequestDto } from './dtos/get-clothes-by-category-request.dto';
 import { GetClothesResponseDto } from './dtos/get-clothes-response.dto';
 import { FilterClothesByTagRequestDto } from './dtos/filter-clothes-by-tag-request.dto';
 import { GetSelectedClothesResponseDto } from './dtos/get-selected-clothes-response.dto';
 import { Tag } from './entities/clothes.entity';
+import { StringResponseDto } from '../codi/dtos/string-response.dto';
 
 @Controller(':userId/clothes')
 export class ClothesController {
@@ -33,5 +34,25 @@ export class ClothesController {
     const selectedClothes = await this.clothesService.getSelectedClothes({ id: clothesId, userId });
 
     return { selectedClothes };
+  }
+
+  @Patch(':clothesId/changeLike')
+  public async likeOrDislikeClothes(@Param('userId') userId: string, @Param('clothesId') clothesId: string): Promise<StringResponseDto> {
+    return await this.clothesService.likeOrDislikeClothes({ clothesId, userId });
+  }
+
+  @Patch(':clothesId/changeTrash')
+  public async trashOrRestoreClothes(@Param('userId') userId: string, @Param('clothesId') clothesId: string): Promise<StringResponseDto> {
+    return await this.clothesService.trashOrRestoreClothes({ clothesId, userId });
+  }
+
+  @Patch(':clothesId/removeFromWish')
+  public async removeFromWish(@Param('userId') userId: string, @Param('clothesId') clothesId: string): Promise<StringResponseDto> {
+    return await this.clothesService.removeFromWish({ clothesId, userId });
+  }
+
+  @Delete(':clothesId/remove')
+  public async removeClothes(@Param('userId') userId: string, @Param('clothesId') clothesId: string): Promise<StringResponseDto> {
+    return await this.clothesService.removeClothes({ clothesId, userId });
   }
 }

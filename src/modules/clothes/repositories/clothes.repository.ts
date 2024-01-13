@@ -36,4 +36,8 @@ export class ClothesRepository {
     update(...args: Parameters<Repository<ClothesEntity>['update']>): ReturnType<Repository<ClothesEntity>['update']> {
         return this.repository.update(...args);
     }
+
+    remove(...args: Parameters<Repository<ClothesEntity>['remove']>): ReturnType<Repository<ClothesEntity>['remove']> {
+        return this.repository.remove(...args);
+    }
 }

@@ -5,6 +5,7 @@ import { CodiEntity, Like } from '../entities/codi.entity';
 import { QueryBus } from '@nestjs/cqrs';
 import { GetUserQuery } from 'src/modules/user/queries/impl/get-user.query';
 import { GetClothesQuery } from 'src/modules/clothes/queries/impl/get-clothes.query';
+import { StringResponseDto } from '../dtos/string-response.dto';
 
 @Injectable()
 export class CodiService {
@@ -75,7 +76,7 @@ export class CodiService {
         return Array.from(stylesSet);
     }
 
-    async saveCodi(args: { userId: string, styles: Styles[], like: Like, clothesIds: string[], clothesImages: string[], comment?: string }): Promise<string> {
+    async saveCodi(args: { userId: string, styles: Styles[], like: Like, clothesIds: string[], clothesImages: string[], comment?: string }): Promise<StringResponseDto> {
         const { userId, styles, like, clothesIds, clothesImages, comment } = args;
 
         const user = await this.queryBus.execute(
@@ -98,10 +99,10 @@ export class CodiService {
             }),
         );
 
-        return 'codi has been saved';
+        return { result: 'codi has been saved' };
     }
     
-    async updateCodi(args: { userId: string, codiId: string, clothesId: string }): Promise<string> {
+    async updateCodi(args: { userId: string, codiId: string, clothesId: string }): Promise<StringResponseDto> {
         const { userId, codiId, clothesId } = args;
 
         const codi = await this.codiRepository.findOne({ 
@@ -131,16 +132,46 @@ export class CodiService {
 
         await this.codiRepository.save(codi);
 
-        return 'the selected clothes has been added to my codi';
+        return { result: 'the selected clothes has been added to my codi' };
     }
 
-    async addComment(args: { userId: string, codiId: string, comment: string }): Promise<string> {
+    async addComment(args: { userId: string, codiId: string, comment: string }): Promise<StringResponseDto> {
         const { codiId, comment } = args;
         
         await this.codiRepository.update(codiId, {
             comment,
         });
 
-        return 'comment has been added to the codi';
+        return { result: 'comment has been added to the codi' };
+    }
+
+    async likeOrDislikeCodi(args: { userId: string, codiId: string }): Promise<StringResponseDto> {
+        const { userId, codiId } = args;
+
+        const codi = await this.codiRepository.findOne({
+            where: {
+                id: codiId,
+                userId,
+            },
+        });
+
+        if (!codi) {
+            return { result: 'No codi is found' };
+        }
+
+        const newLike = codi.like === Like.Like ? Like.None : Like.Like;
+
+        await this.codiRepository.update(codiId, {
+            like: newLike,
+        });
+    
+        const updatedCodi = await this.codiRepository.findOne({
+            where: {
+                id: codiId,
+                userId,
+            },
+        });
+
+        return { result: 'the like has been changed to ' + updatedCodi.like };
     }
 }

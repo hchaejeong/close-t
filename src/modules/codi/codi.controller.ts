@@ -4,6 +4,7 @@ import { AddCommentRequestDto } from './dtos/add-comment-request.dto';
 import { GetAllCodiesResponseDto } from './dtos/get-all-codies-response.dto';
 import { GetSelectedCodiResponseDto } from './dtos/get-selected-codi-response.dto';
 import { SaveCodiRequestDto } from './dtos/save-codi-request.dto';
+import { StringResponseDto } from './dtos/string-response.dto';
 
 @Controller(':userId/codi')
 export class CodiController {
@@ -21,7 +22,7 @@ export class CodiController {
   }
 
   @Post('save')
-  public async saveCodi(@Param('userId') userId: string, @Body() body: SaveCodiRequestDto): Promise<string> {
+  public async saveCodi(@Param('userId') userId: string, @Body() body: SaveCodiRequestDto): Promise<StringResponseDto> {
     const { like, clothesIds, clothesImages, comment } = body;
     const styles = await this.codiService.getMainStylesFromClothes({ userId, clothesIds });
 
@@ -36,14 +37,19 @@ export class CodiController {
   }
 
   @Patch(':codiId/add/:clothesId')
-  public async updateCodi(@Param('userId') userId: string, @Param('codiId') codiId: string, @Param('clothesId') clothesId: string): Promise<string> {
+  public async updateCodi(@Param('userId') userId: string, @Param('codiId') codiId: string, @Param('clothesId') clothesId: string): Promise<StringResponseDto> {
     return await this.codiService.updateCodi({ userId, codiId, clothesId });
   }
 
   @Patch(':codiId/comment')
-  public async addCommentToCodi(@Param('userId') userId: string, @Param('codiId') codiId: string, @Body() body: AddCommentRequestDto): Promise<string> {
+  public async addCommentToCodi(@Param('userId') userId: string, @Param('codiId') codiId: string, @Body() body: AddCommentRequestDto): Promise<StringResponseDto> {
     const { comment } = body;
 
     return await this.codiService.addComment({ userId, codiId, comment });
+  }
+
+  @Patch(':codiId/like')
+  public async likeCodi(@Param('userId') userId: string, @Param('codiId') codiId: string): Promise<StringResponseDto> {
+    return await this.codiService.likeOrDislikeCodi({ userId, codiId });
   }
 }
