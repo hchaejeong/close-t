@@ -45,8 +45,6 @@ export class CodiService {
             )
             if (selectedClothes.link) {
                 links.push(selectedClothes.link);
-            } else {
-                links.push(null);
             }
         }));
 
@@ -123,7 +121,6 @@ export class CodiService {
             }),
         );
 
-        codi.clothesIds.push(clothesId);
         codi.clothesImages.push(clothes.imageUrl);
         const styles = clothes.styles;
 
