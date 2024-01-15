@@ -23,6 +23,19 @@ export class CodiService {
         return codies;
     }
 
+    async getLikedCodies(args: { userId: string }): Promise<CodiEntity[]> {
+        const { userId } = args;
+
+        const likedCodies = await this.codiRepository.find({
+            where: {
+                userId,
+                like: Like.Like,
+            },
+        });
+
+        return likedCodies;
+    }
+
     async getSelectedCodi(args: { userId: string, codiId: string }): Promise<{ codi: CodiEntity, links: string[] }> {
         const { userId, codiId } = args;
 

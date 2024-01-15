@@ -1,4 +1,5 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString } from "class-validator";
+import { BodyType, Styles } from "../entities/user.entity";
 
 export class GetProfileResponseDto {
     @IsString()
@@ -12,4 +13,20 @@ export class GetProfileResponseDto {
 
     @IsString()
     gender: string;
+
+    @IsOptional()
+    @IsNumber()
+    age?: number | null;
+
+    @IsOptional()
+    @IsNumber()
+    height?: number | null;
+
+    @IsOptional()
+    @IsString()
+    bodyType?: BodyType | null;
+
+    @IsOptional()
+    @IsString()
+    styles?: Styles[] | null;
 }

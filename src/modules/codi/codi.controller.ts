@@ -5,6 +5,7 @@ import { GetAllCodiesResponseDto } from './dtos/get-all-codies-response.dto';
 import { GetSelectedCodiResponseDto } from './dtos/get-selected-codi-response.dto';
 import { SaveCodiRequestDto } from './dtos/save-codi-request.dto';
 import { StringResponseDto } from './dtos/string-response.dto';
+import { GetLikedCodiesResponseDto } from './dtos/get-liked-codies-response.dto';
 
 @Controller(':userId/codi')
 export class CodiController {
@@ -19,6 +20,16 @@ export class CodiController {
     const clothesImages = codies.map((codi) => codi.clothesImages);
 
     return { codiIds, likes, clothesImageUrls: clothesImages };
+  }
+
+  @Get('liked')
+  public async getLikedCodies(@Param('userId') userId: string): Promise<GetLikedCodiesResponseDto> {
+    const likedCodies = await this.codiService.getLikedCodies({ userId });
+
+    const likedCodiIds = likedCodies.map((likedCodi) => likedCodi.id);
+    const likedClothesImages = likedCodies.map((likedCodi) => likedCodi.clothesImages);
+
+    return { codiIds: likedCodiIds, clothesImageUrls: likedClothesImages }
   }
 
   @Post('save')

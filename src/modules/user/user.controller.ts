@@ -12,7 +12,7 @@ export class UserController {
   public async getProfile(@Param('userId') userId: string): Promise<GetProfileResponseDto> {
     const user = await this.userService.getProfile({ id: userId });
 
-    return { name: user.name, gender: user.gender, email: user.email, profileImage: user.profileImage };
+    return { name: user.name, gender: user.gender, email: user.email, profileImage: user.profileImage, age: user.age, height: user.height, bodyType: user.bodyType, styles: user.styles };
   }
 
   @Get(':userId/check')
