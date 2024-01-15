@@ -1,19 +1,23 @@
-import { IsArray, IsEnum, IsOptional, IsString } from "class-validator";
-import { Category, Tag } from "../entities/clothes.entity";
+import { IsEnum, IsOptional, IsString } from "class-validator";
+import { Category } from "../entities/clothes.entity";
 import { Styles } from "src/modules/user/entities/user.entity";
 
 export class AddClothesRequestDto {
-    @IsEnum(Category)
+    @IsString()
     category: Category;
 
     @IsEnum(Styles, { each: true })
-    @IsArray()
+    //@IsArray()
     styles: Styles[];
 
-    @IsOptional()
-    @IsArray()
-    @IsEnum(Tag, { each: true })
-    tag?: Tag[] | null;
+    @IsString()
+    like: 'Like' | 'None';
+
+    @IsString()
+    wish: 'Wish' | 'None';
+
+    @IsString()
+    trash: 'Trash' | 'None';
 
     @IsString()
     imageUrl: string;
@@ -22,6 +26,6 @@ export class AddClothesRequestDto {
     @IsString()
     link?: string | null;
 
-    @IsString()
+    //@IsString()
     userId: string;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClothesRepository } from '../repositories/clothes.repository';
-import { Category, ClothesEntity, Tag } from '../entities/clothes.entity';
+import { Category, ClothesEntity } from '../entities/clothes.entity';
 import { StringResponseDto } from 'src/modules/codi/dtos/string-response.dto';
 import { ILike } from 'typeorm';
 import { QueryBus } from '@nestjs/cqrs';
@@ -26,17 +26,43 @@ export class ClothesService {
         return clothes;
     }
 
-    async filterClothesByTag(args: { tag: Tag, category: Category, userId: string }): Promise<ClothesEntity[]> {
-        const { tag, category, userId } = args;
-        const clothes = await this.clothesRepository.find({
+    async getLikedClothes(args: { id: string, category: Category }): Promise<ClothesEntity[]> {
+        const { id, category } = args;
+        const likedClothes = await this.clothesRepository.find({
             where: {
-                tag,
+                like: 'Like',
                 category,
-                userId,
+                userId: id,
             },
         });
 
-        return clothes;
+        return likedClothes;
+    }
+
+    async getTrashedClothes(args: { id: string, category: Category }): Promise<ClothesEntity[]> {
+        const { id, category } = args;
+        const trashedClothes = await this.clothesRepository.find({
+            where: {
+                trash: 'Trash',
+                category,
+                userId: id,
+            },
+        });
+
+        return trashedClothes;
+    }
+
+    async getWishedClothes(args: { id: string, category: Category }): Promise<ClothesEntity[]> {
+        const { id, category } = args;
+        const wishedClothes = await this.clothesRepository.find({
+            where: {
+                wish: 'Wish',
+                category,
+                userId: id,
+            },
+        });
+
+        return wishedClothes;
     }
 
     async getSelectedClothes(args: { id: string, userId: string }): Promise<ClothesEntity> {
@@ -51,8 +77,8 @@ export class ClothesService {
         return selectedClothes;
     }
 
-    async addClothes(args: { category: Category, styles: Styles[], tag?: Tag[], imageUrl: string, link?: string, userId: string }): Promise<StringResponseDto> {
-        const { category, styles, tag, imageUrl, link, userId } = args;
+    async addClothes(args: { category: Category, styles: Styles[], like: 'Like' | 'None', trash: 'Trash' | 'None', wish: 'Wish' | 'None', imageUrl: string, link?: string, userId: string }): Promise<StringResponseDto> {
+        const { category, styles, like, trash, wish, imageUrl, link, userId } = args;
 
         const user = await this.queryBus.execute(
             new GetUserQuery({
@@ -70,7 +96,9 @@ export class ClothesService {
             await this.clothesRepository.create({
                 category,
                 styles,
-                tag,
+                like,
+                trash,
+                wish,
                 imageUrl,
                 link,
                 user,
@@ -93,16 +121,16 @@ export class ClothesService {
             return { result: 'Clothes is not found' };
         }
 
-        const currentTags = selectedClothes.tag || [];
-        if (currentTags.includes(Tag.Like)) {
+        const currentLike = selectedClothes.like;
+        if (currentLike.match('Like')) {
             // If Like tag exists, remove it
-            const updatedTags = currentTags.filter(tag => tag !== Tag.Like);
-            await this.clothesRepository.update(clothesId, { tag: updatedTags });
+            const newLike = 'None';
+            await this.clothesRepository.update(clothesId, { like: newLike });
             return { result: 'Like has been removed' };
         } else {
             // If Like tag does not exist, add it
-            currentTags.push(Tag.Like);
-            await this.clothesRepository.update(clothesId, { tag: currentTags });
+            const newLike = 'Like';
+            await this.clothesRepository.update(clothesId, { like: newLike });
             return { result: 'Like has been added' };
         }
     }
@@ -121,15 +149,15 @@ export class ClothesService {
             return { result: 'Clothes not found' };
         }
 
-        const currentTags = selectedClothes.tag || [];
+        const currentTrash = selectedClothes.trash;
         
-        if (currentTags.includes(Tag.Trash)) {
-            const updatedTags = currentTags.filter(tag => tag !== Tag.Trash);
-            await this.clothesRepository.update(clothesId, { tag: updatedTags });
+        if (currentTrash.match('Trash')) {
+            const updatedTrash = 'None';
+            await this.clothesRepository.update(clothesId, { trash: updatedTrash });
             return { result: 'Trash tag has been removed' };
         } else {
-            currentTags.push(Tag.Trash);
-            await this.clothesRepository.update(clothesId, { tag: currentTags });
+            const updatedTrash = 'Trash';
+            await this.clothesRepository.update(clothesId, { trash: updatedTrash });
             return { result: 'Trash tag added' };
         }
     }
@@ -148,15 +176,16 @@ export class ClothesService {
             return { result: 'Clothes not found' };
         }
 
-        const currentTags = selectedClothes.tag || [];
+        const currentWish = selectedClothes.wish;
         
-        if (currentTags.includes(Tag.Wish)) {
-            const updatedTags = currentTags.filter(tag => tag !== Tag.Wish);
-            await this.clothesRepository.update(clothesId, { tag: updatedTags });
+        if (currentWish.match('Wish')) {
+            const updatedWish = 'None';
+            await this.clothesRepository.update(clothesId, { wish: updatedWish });
             return { result: 'Clothes has been removed from wish list' };
         } else {
-
-            return { result: 'This clothes is already not in wish list' };
+            const updatedWish = 'Wish';
+            await this.clothesRepository.update(clothesId, { wish: updatedWish});
+            return { result: 'Clothes is added to wish list' };
         }
     }
 

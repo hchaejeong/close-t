@@ -1,5 +1,5 @@
 import { IsArray } from "class-validator";
-import { ClothesEntity, Tag } from "../entities/clothes.entity";
+import { ClothesEntity } from "../entities/clothes.entity";
 
 export class GetClothesResponseDto {
     @IsArray()

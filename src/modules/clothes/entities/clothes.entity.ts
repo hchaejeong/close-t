@@ -11,12 +11,6 @@ export enum Category {
     Bag = '가방',
 }
 
-export enum Tag {
-    Like = 'like',
-    Wish = 'wish',
-    Trash = 'trash',
-}
-
 @Entity({
     name: 'clothes',
 })
@@ -43,11 +37,23 @@ export class ClothesEntity extends BaseEntity {
     @Column({
         type: 'varchar',
         length: 25,
-        nullable: true,
-        array: true,
     })
     @Expose()
-    tag?: Tag[] | null;
+    like: 'Like' | 'None';
+
+    @Column({
+        type: 'varchar',
+        length: 25,
+    })
+    @Expose()
+    wish: 'Wish' | 'None';
+
+    @Column({
+        type: 'varchar',
+        length: 25,
+    })
+    @Expose()
+    trash: 'Trash' | 'None';
 
     @Column({
         type: 'varchar',
@@ -58,7 +64,7 @@ export class ClothesEntity extends BaseEntity {
 
     @Column({
         type: 'varchar',
-        length: 100,
+        length: 500,
         nullable: true,
     })
     @Expose()

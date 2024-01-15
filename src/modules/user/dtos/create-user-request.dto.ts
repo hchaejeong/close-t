@@ -17,11 +17,9 @@ export class CreateUserRequestDto {
     @IsString()
     profileImage: string;
 
-    @IsNumber()
     @IsOptional()
     age?: number | null;
 
-    @IsNumber()
     @IsOptional()
     height?: number | null;
 

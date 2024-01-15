@@ -2,19 +2,21 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Styles, UserEntity } from "src/modules/user/entities/user.entity";
-import { Category, ClothesEntity, Tag } from "../entities/clothes.entity";
+import { Category, ClothesEntity } from "../entities/clothes.entity";
 
 @Injectable()
 export class ClothesRepository {
     constructor(@InjectRepository(ClothesEntity) private repository: Repository<ClothesEntity>,) {}
 
-    create(args: { category: Category, styles: Styles[], tag: Tag[], imageUrl: string, link?: string, user: UserEntity}): ClothesEntity {
-        const { category, styles, tag, imageUrl, link, user } = args;
+    create(args: { category: Category, styles: Styles[], like: 'Like' | 'None', trash: 'Trash' | 'None', wish: 'Wish' | 'None', imageUrl: string, link?: string, user: UserEntity}): ClothesEntity {
+        const { category, styles, like, trash, wish, imageUrl, link, user } = args;
 
         return this.repository.create({
             category,
             styles,
-            tag,
+            like,
+            trash,
+            wish,
             imageUrl,
             link,
             user

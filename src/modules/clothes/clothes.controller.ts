@@ -1,10 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ClothesService } from './services/clothes.service';
 import { GetClothesByCategoryRequestDto } from './dtos/get-clothes-by-category-request.dto';
 import { GetClothesResponseDto } from './dtos/get-clothes-response.dto';
-import { FilterClothesByTagRequestDto } from './dtos/filter-clothes-by-tag-request.dto';
 import { GetSelectedClothesResponseDto } from './dtos/get-selected-clothes-response.dto';
-import { Tag } from './entities/clothes.entity';
 import { StringResponseDto } from '../codi/dtos/string-response.dto';
 import { AddClothesRequestDto } from './dtos/add-clothes-request.dto';
 
@@ -21,13 +19,31 @@ export class ClothesController {
     return { clothes };
   }
 
-  @Get('filter/:tag')
-  public async filterClothesByTag(@Param('userId') userId: string, @Param('tag') tag: Tag, @Query() query: GetClothesByCategoryRequestDto): Promise<GetClothesResponseDto> {
+  @Get('liked')
+  public async getLikedClothes(@Param('userId') userId: string, @Query() query: GetClothesByCategoryRequestDto): Promise<GetClothesResponseDto> {
     const { category } = query;
 
-    const clothes = await this.clothesService.filterClothesByTag({ tag, category, userId });
+    const likedClothes = await this.clothesService.getLikedClothes({ id: userId, category });
 
-    return { clothes };
+    return { clothes: likedClothes };
+  }
+
+  @Get('trashed')
+  public async getTrashedClothes(@Param('userId') userId: string, @Query() query: GetClothesByCategoryRequestDto): Promise<GetClothesResponseDto> {
+    const { category } = query;
+
+    const trashedClothes = await this.clothesService.getTrashedClothes({ id: userId, category });
+
+    return { clothes: trashedClothes };
+  }
+
+  @Get('wished')
+  public async getWishedClothes(@Param('userId') userId: string, @Query() query: GetClothesByCategoryRequestDto): Promise<GetClothesResponseDto> {
+    const { category } = query;
+
+    const wishedClothes = await this.clothesService.getWishedClothes({ id: userId, category });
+
+    return { clothes: wishedClothes };
   }
 
   @Get(':clothesId')
@@ -39,12 +55,14 @@ export class ClothesController {
 
   @Post('add')
   public async addClothes(@Param('userId') userId: string, @Body() body: AddClothesRequestDto): Promise<StringResponseDto> {
-    const { category, styles, tag, imageUrl, link } = body;
+    const { category, styles, like, wish, trash, imageUrl, link } = body;
 
     return await this.clothesService.addClothes({
       category,
       styles,
-      tag,
+      like,
+      trash,
+      wish,
       imageUrl,
       link,
       userId,

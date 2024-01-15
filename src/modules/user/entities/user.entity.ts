@@ -3,21 +3,21 @@ import { ClothesEntity } from "src/modules/clothes/entities/clothes.entity";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BodyType {
-    Straight = '스트레이트',
-    Wave = '웨이브',
-    Natural = '내추럴',
-    HourGlass = '모래시계형',
+    Straight = "스트레이트",
+    Wave = "웨이브",
+    Natural = "내추럴",
+    HourGlass = "모래시계형",
 }
 
 export enum Styles {
-    Casual = '캐주얼',
-    Sporty = '스포티',
-    Lovely = '러블리',
-    Basic = '심플베이직',
-    Chic = '모던시크',
-    Romantic = '로맨틱럭셔리',
-    Formal = '포멀/오피스룩',
-    Natural = '꾸안꾸',
+    Casual = "캐주얼",
+    Sporty = "스포티",
+    Lovely = "러블리",
+    Basic = "심플베이직",
+    Chic = "모던시크",
+    Romantic = "로맨틱럭셔리",
+    Formal = "포멀/오피스룩",
+    Natural = "꾸안꾸",
 }
 
 @Entity({
