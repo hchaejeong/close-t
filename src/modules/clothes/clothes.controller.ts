@@ -55,7 +55,7 @@ export class ClothesController {
 
   @Post('add')
   public async addClothes(@Param('userId') userId: string, @Body() body: AddClothesRequestDto): Promise<StringResponseDto> {
-    const { category, styles, like, wish, trash, imageUrl, link } = body;
+    const { category, styles, like, trash, wish, imageUrl, link } = body;
 
     return await this.clothesService.addClothes({
       category,

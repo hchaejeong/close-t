@@ -4,7 +4,6 @@ import { QueryBus } from '@nestjs/cqrs';
 import OpenAI from 'openai';
 import { BodyType, Styles } from 'src/modules/user/entities/user.entity';
 import { GetUserQuery } from 'src/modules/user/queries/impl/get-user.query';
-import internal from 'stream';
 
 @Injectable()
 export class OpenaiService {
@@ -21,7 +20,7 @@ export class OpenaiService {
         });
     }
 
-    async generateImage(args: { userId: string, stylePick: Styles }): Promise<any> {
+    async generateImage(args: { userId: string, stylePick: string }): Promise<any> {
         const { userId, stylePick } = args;
         
         const user = await this.queryBus.execute(
@@ -44,8 +43,9 @@ export class OpenaiService {
         const prompt = `For ${gender} of age ${age}, height ${height} who has a ${bodyType} body shape, generate today's OOTD for ${stylePick} fashion style.`;
 
         try {
-            const image = await this.openai.images.generate({ model: 'dall-e-3', prompt });
-            return image.data;
+            const image = await this.openai.images.generate({ model: 'dall-e-3', prompt, size: '1024x1024' });
+            console.log(image.data)
+            return image.data[0];
           } catch (error) {
             throw new Error(`Failed to generate image: ${error.message}`);
           }

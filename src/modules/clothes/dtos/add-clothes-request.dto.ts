@@ -14,10 +14,10 @@ export class AddClothesRequestDto {
     like: 'Like' | 'None';
 
     @IsString()
-    wish: 'Wish' | 'None';
+    trash: 'Trash' | 'None';
 
     @IsString()
-    trash: 'Trash' | 'None';
+    wish: 'Wish' | 'None';
 
     @IsString()
     imageUrl: string;
