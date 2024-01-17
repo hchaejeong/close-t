@@ -40,7 +40,7 @@ export class OpenaiService {
         const height = user.height;
         const bodyType = user.bodyType;
 
-        const prompt = `For ${gender} of age ${age}, height ${height} who has a ${bodyType} body shape, generate today's OOTD for ${stylePick} fashion style.`;
+        const prompt = `For ${gender} of age ${age}, height ${height} who has a ${bodyType} body shape, generate today's OOTD for ${stylePick} fashion style. The generated image should resemble a fashion magazine consisting of physical images of clothings from the closet. Do not include a figure of a person and instead only show one styling including one top, bottom, outer, shoes, and bag.`;
 
         try {
             const image = await this.openai.images.generate({ model: 'dall-e-3', prompt, size: '1024x1024' });

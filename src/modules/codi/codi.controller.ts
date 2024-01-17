@@ -46,7 +46,7 @@ export class CodiController {
   public async getSelectedCodi(@Param('userId') userId: string, @Param('codiId') codiId: string): Promise<GetSelectedCodiResponseDto> {
     const { codi, links } = await this.codiService.getSelectedCodi({ userId, codiId });
 
-    return { styles: codi.styles, clothesImages: codi.clothesImages, comment: codi.comment, like: codi.like, links };
+    return { styles: codi.styles, clothesIds: codi.clothesIds, clothesImages: codi.clothesImages, comment: codi.comment, like: codi.like, links };
   }
 
   @Patch(':codiId/add/:clothesId')

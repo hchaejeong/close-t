@@ -8,6 +8,9 @@ export class GetSelectedCodiResponseDto {
     styles: Styles[];
 
     @IsArray()
+    clothesIds: (string | null)[]
+
+    @IsArray()
     @IsString({ each: true })
     clothesImages: string[];
 
