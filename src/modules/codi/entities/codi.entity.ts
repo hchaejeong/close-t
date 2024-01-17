@@ -33,17 +33,19 @@ export class CodiEntity extends BaseEntity {
     @Column({
         type: 'uuid',
         array: true,
+        nullable: true,
     })
     @Expose()
-    clothesIds: string[];
+    clothesIds: (string | null)[];
 
     @Column({
         type: 'varchar',
         length: 100,
         array: true,
+        nullable: true,
     })
     @Expose()
-    clothesImages: string[];
+    clothesImages: (string | null)[];
 
     @Column({
         type: 'varchar',

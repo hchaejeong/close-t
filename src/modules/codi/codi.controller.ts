@@ -35,6 +35,8 @@ export class CodiController {
   @Post('save')
   public async saveCodi(@Param('userId') userId: string, @Body() body: SaveCodiRequestDto): Promise<StringResponseDto> {
     const { like, clothesIds, clothesImages, comment } = body;
+    console.log("clothesIds: ", clothesIds)
+    console.log("clothesImages: ", clothesImages)
     const styles = await this.codiService.getMainStylesFromClothes({ userId, clothesIds });
 
     return await this.codiService.saveCodi({ userId, styles, like, clothesIds, clothesImages, comment });

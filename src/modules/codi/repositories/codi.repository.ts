@@ -11,7 +11,7 @@ import { string } from "yargs";
 export class CodiRepository {
     constructor(@InjectRepository(CodiEntity) private repository: Repository<CodiEntity>) {}
 
-    create(args: { styles: Styles[], like: Like, clothesIds: string[], clothesImages: string[], comment?: string, user: UserEntity, userId: string }): CodiEntity {
+    create(args: { styles: Styles[], like: Like, clothesIds: (string| null)[], clothesImages: (string | null)[], comment?: string, user: UserEntity, userId: string }): CodiEntity {
         const { styles, clothesIds, clothesImages, like, comment, user, userId } = args;
 
         return this.repository.create({

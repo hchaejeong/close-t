@@ -12,12 +12,10 @@ export class SaveCodiRequestDto {
     like: Like;
 
     @IsArray()
-    @IsString({ each: true })
-    clothesIds: string[];
+    clothesIds: (string | null)[];
 
-    @IsString()
-    @IsString({ each: true })
-    clothesImages: string[];
+    @IsArray()
+    clothesImages: (string | null)[];
 
     @IsString()
     @IsOptional()

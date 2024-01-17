@@ -47,19 +47,40 @@ export class CodiService {
         });
 
         const links = [];
+        console.log(codi.clothesImages);
 
-        await Promise.all(codi.clothesIds.map(async (selectedClothesId) => {
+        // await Promise.all(codi.clothesIds.map(async (selectedClothesId) => {
+        //     const selectedClothes = await this.queryBus.execute(
+        //         new GetClothesQuery({
+        //             where: {
+        //                 id: selectedClothesId,
+        //             },
+        //         }),
+        //     )
+        //     console.log("selected:", selectedClothes);
+        //     if (selectedClothes.link) {
+        //         links.push(selectedClothes.link);
+        //     } else {
+        //         links.push('');
+        //     }
+        // }));
+        for (let i = 0; i < codi.clothesIds.length; i++) {
+            const selectedClothesId = codi.clothesIds[i];
             const selectedClothes = await this.queryBus.execute(
                 new GetClothesQuery({
                     where: {
                         id: selectedClothesId,
                     },
                 }),
-            )
+            );
+            
             if (selectedClothes.link) {
                 links.push(selectedClothes.link);
+            } else {
+                links.push(null);
             }
-        }));
+        }
+        console.log(links);
 
         return { codi, links };
     }
@@ -89,8 +110,15 @@ export class CodiService {
         return Array.from(stylesSet);
     }
 
-    async saveCodi(args: { userId: string, styles: Styles[], like: Like, clothesIds: string[], clothesImages: string[], comment?: string }): Promise<StringResponseDto> {
+    async saveCodi(args: { userId: string, styles: Styles[], like: Like, clothesIds: (string | null)[], clothesImages: (string | null)[], comment?: string }): Promise<StringResponseDto> {
         const { userId, styles, like, clothesIds, clothesImages, comment } = args;
+
+        const filledClothesIds = Array.from({ length: 6 }, (_, index) => clothesIds[index] || null);
+        console.log("accepted: ", clothesIds)
+        console.log(filledClothesIds)
+        const filledClothesImages = Array.from({ length: 6 }, (_, index) => clothesImages[index] || null);
+        console.log("accepted images: ", clothesImages)
+        console.log(filledClothesImages)
 
         const user = await this.queryBus.execute(
             new GetUserQuery({
@@ -104,8 +132,8 @@ export class CodiService {
             await this.codiRepository.create({
                 styles,
                 like,
-                clothesIds,
-                clothesImages,
+                clothesIds: filledClothesIds,
+                clothesImages: filledClothesImages,
                 comment,
                 user,
                 userId,
